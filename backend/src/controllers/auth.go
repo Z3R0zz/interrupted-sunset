@@ -16,7 +16,7 @@ type LoginInput struct {
 func Login(c *fiber.Ctx) error {
 	var input LoginInput
 	if err := c.BodyParser(&input); err != nil {
-		return utils.HandleError(c, err, fiber.StatusBadRequest, "Invalid request body")
+		return utils.HandleError(c, err, fiber.StatusBadRequest, "invalid request body")
 	}
 
 	if err := rules.Validate.Struct(input); err != nil {

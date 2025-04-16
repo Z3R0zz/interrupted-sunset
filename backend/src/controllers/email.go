@@ -16,7 +16,7 @@ type EmailInput struct {
 func NewEmail(c *fiber.Ctx) error {
 	var input EmailInput
 	if err := c.BodyParser(&input); err != nil {
-		return utils.HandleError(c, err, fiber.StatusBadRequest, "Invalid request body")
+		return utils.HandleError(c, err, fiber.StatusBadRequest, "invalid request body")
 	}
 
 	if err := rules.Validate.Struct(input); err != nil {
@@ -30,10 +30,10 @@ func NewEmail(c *fiber.Ctx) error {
 	}
 
 	if err := otp.Create(c.Context()); err != nil {
-		return utils.HandleError(c, err, fiber.StatusInternalServerError, "Failed to create OTP")
+		return utils.HandleError(c, err, fiber.StatusInternalServerError, "internal server error")
 	}
 
 	return c.JSON(fiber.Map{
-		"message": "OTP sent to email",
+		"message": "Please check your email for the OTP code",
 	})
 }
