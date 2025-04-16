@@ -37,3 +37,19 @@ func Login(c *fiber.Ctx) error {
 		"token": token,
 	})
 }
+
+func User(c *fiber.Ctx) error {
+	user := c.Locals("user").(*models.User)
+	verified := false
+	
+	if user.EmailVerifiedAt != nil {
+		verified = true
+	}
+
+	return c.JSON(fiber.Map{
+		"ID":       user.ID,
+		"Username": user.Username,
+		"Email":    user.Email,
+		"Verified": verified,
+	})
+}
