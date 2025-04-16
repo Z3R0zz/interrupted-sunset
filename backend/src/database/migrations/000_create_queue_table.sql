@@ -1,0 +1,12 @@
+CREATE TABLE IF NOT EXISTS queue (
+    id BIGINT UNSIGNED PRIMARY KEY AUTO_INCREMENT,
+    user_id BIGINT UNSIGNED NOT NULL,
+    status ENUM('waiting', 'processing', 'done', 'failed') DEFAULT 'waiting',
+    attempt_count TINYINT UNSIGNED DEFAULT 0,
+    last_error TEXT DEFAULT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
+    UNIQUE(user_id)
+);
