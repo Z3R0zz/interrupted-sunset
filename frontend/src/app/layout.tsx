@@ -22,9 +22,8 @@ const poppins = Poppins({
 });
 
 export const metadata: Metadata = {
-    title: "Kars Template",
-    description: "Default text for all apps powered by create-kapp.",
-    // keywords: [],
+    title: { template: "%s – interrupted.me", default: "Sunset" },
+
     openGraph: {
         url: "https://kars.bio/",
         type: "website",
