@@ -29,6 +29,10 @@ func NewMail(c *fiber.Ctx) error {
 
 	user := c.Locals("user").(*models.User)
 
+	if user.EmailVerifiedAt != nil {
+		return utils.HandleError(c, nil, fiber.StatusBadRequest, "email already verified")
+	}
+
 	otp := models.OTP{
 		UserID:    user.ID,
 		Email:     input.Email,
