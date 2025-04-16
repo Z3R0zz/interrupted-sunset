@@ -61,3 +61,32 @@ func (u *User) AttemptLogin(ctx context.Context) (string, error) {
 
 	return signedToken, nil
 }
+
+func (u *User) Get(ctx context.Context) error {
+	var verifiedAtRaw []byte
+
+	row := database.DB.QueryRowContext(ctx, "SELECT id, username, email, email_verified_at FROM users WHERE id = ?", u.ID)
+	err := row.Scan(&u.ID, &u.Username, &u.Email, &verifiedAtRaw)
+	if err != nil {
+		if errors.Is(err, sql.ErrNoRows) {
+			return fmt.Errorf("user not found")
+		}
+
+		utils.Logger.WithError(err).WithFields(logrus.Fields{
+			"user_id": u.ID,
+		}).Error("error querying user")
+
+		return fmt.Errorf("internal server error")
+	}
+
+	if len(verifiedAtRaw) > 0 {
+		parsedTime, err := time.Parse("2006-01-02 15:04:05", string(verifiedAtRaw))
+		if err != nil {
+			utils.Logger.WithError(err).Error("failed to parse email_verified_at")
+		} else {
+			u.EmailVerifiedAt = &parsedTime
+		}
+	}
+
+	return nil
+}
