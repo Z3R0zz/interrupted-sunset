@@ -33,14 +33,14 @@ func (q *Queue) GetStatus(ctx context.Context) (string, error) {
 
 func (q *Queue) Insert(ctx context.Context) error {
 	query := `
-		INSERT INTO queue (user_id, status, attempt_count, last_error)
-		VALUES (?, ?, ?, ?)
+		INSERT INTO queue (user_id)
+		VALUES (?)
 	`
-	_, err := database.DB.ExecContext(ctx, query, q.UserID, q.Status, q.AttemptCount, q.LastError)
+	_, err := database.DB.ExecContext(ctx, query, q.UserID)
 	return err
 }
 
-func GetQueueByUserID(ctx context.Context, userID uint64) (*Queue, error) {
+func GetQueueByUserID(ctx context.Context, userID uint) (*Queue, error) {
 	var q Queue
 	query := `SELECT id, user_id, status, attempt_count, last_error, created_at, updated_at FROM queues WHERE user_id = ? LIMIT 1`
 	err := database.DB.QueryRowContext(ctx, query, userID).Scan(
