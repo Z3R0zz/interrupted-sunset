@@ -14,4 +14,6 @@ var ApiRoutes = []Route{
 	{Method: "POST", Path: "/mail/verify", Handler: controllers.VerifyMail, Middlewares: []fiber.Handler{middleware.AuthMiddleware()}},
 
 	{Method: "GET", Path: "/user", Handler: controllers.User, Middlewares: []fiber.Handler{middleware.AuthMiddleware()}},
+
+	{Method: "POST", Path: "/queue", Handler: controllers.Queue, Middlewares: []fiber.Handler{middleware.AuthMiddleware()}},
 }
