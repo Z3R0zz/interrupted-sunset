@@ -50,7 +50,6 @@ func (u *User) AttemptLogin(ctx context.Context) (string, error) {
 	claims := jwt.MapClaims{
 		"user_id": u.ID,
 		"exp":     expiration.Unix(),
-		"iat":     time.Now().Unix(),
 	}
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
 
