@@ -9,7 +9,7 @@ import (
 
 type Queue struct {
 	ID           uint64
-	UserID       uint64
+	UserID       uint
 	Status       string
 	AttemptCount uint8
 	LastError    sql.NullString

@@ -40,16 +40,28 @@ func Login(c *fiber.Ctx) error {
 
 func User(c *fiber.Ctx) error {
 	user := c.Locals("user").(*models.User)
-	verified := false
-	
-	if user.EmailVerifiedAt != nil {
-		verified = true
+
+	queue := models.Queue{UserID: user.ID}
+	ctx := c.Context()
+
+	exists, err := queue.ExistsInQueue(ctx)
+	if err != nil {
+		return utils.HandleError(c, err, fiber.StatusInternalServerError, "failed to check queue existence")
+	}
+
+	status := ""
+	if exists {
+		if status, err = queue.GetStatus(ctx); err != nil {
+			return utils.HandleError(c, err, fiber.StatusInternalServerError, "failed to get queue status")
+		}
 	}
 
 	return c.JSON(fiber.Map{
 		"ID":       user.ID,
 		"Username": user.Username,
 		"Email":    user.Email,
-		"Verified": verified,
+		"Verified": user.EmailVerifiedAt != nil,
+		"Queue":    exists,
+		"Status":   status,
 	})
 }
