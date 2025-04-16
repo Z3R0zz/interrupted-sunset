@@ -34,6 +34,21 @@ func AuthMiddleware() fiber.Handler {
 			})
 		}
 
+		expAt, ok := (*claims)["exp"].(float64)
+		if !ok {
+			return c.Status(fiber.StatusUnauthorized).JSON(fiber.Map{
+				"middleware": true,
+				"error":      "Unauthorized",
+			})
+		}
+
+		if int64(expAt) < jwt.TimeFunc().Unix() {
+			return c.Status(fiber.StatusUnauthorized).JSON(fiber.Map{
+				"middleware": true,
+				"error":      "Unauthorized",
+			})
+		}
+
 		userIDFloat, ok := (*claims)["user_id"].(float64)
 		if !ok {
 			return c.Status(fiber.StatusUnauthorized).JSON(fiber.Map{
