@@ -10,5 +10,5 @@ import (
 var ApiRoutes = []Route{
 	{Method: "POST", Path: "/login", Handler: controllers.Login},
 
-	{Method: "POST", Path: "/email/new", Handler: controllers.NewEmail, Middlewares: []fiber.Handler{middleware.AuthMiddleware()}},
+	{Method: "POST", Path: "/mail/new", Handler: controllers.NewMail, Middlewares: []fiber.Handler{middleware.AuthMiddleware()}},
 }

@@ -13,7 +13,7 @@ type EmailInput struct {
 	Email string `json:"email" validate:"email,max=200,required"`
 }
 
-func NewEmail(c *fiber.Ctx) error {
+func NewMail(c *fiber.Ctx) error {
 	var input EmailInput
 	if err := c.BodyParser(&input); err != nil {
 		return utils.HandleError(c, err, fiber.StatusBadRequest, "invalid request body")
