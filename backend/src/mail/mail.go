@@ -14,7 +14,6 @@ type EmailSender struct {
 	SMTPLogin    string
 	SMTPPassword string
 	SMTPServer   string
-	BaseURL      string
 }
 
 func NewEmailSender() (*EmailSender, error) {
@@ -34,24 +33,19 @@ func NewEmailSender() (*EmailSender, error) {
 	if smtpServer == "" {
 		return nil, fmt.Errorf("SMTP_SERVER environment variable is missing")
 	}
-	baseURL := os.Getenv("URL")
-	if baseURL == "" {
-		return nil, fmt.Errorf("URL environment variable is missing")
-	}
 
 	return &EmailSender{
 		SMTPFrom:     smtpFrom,
 		SMTPLogin:    smtpLogin,
 		SMTPPassword: smtpPassword,
 		SMTPServer:   smtpServer,
-		BaseURL:      baseURL,
 	}, nil
 }
 
 func (es *EmailSender) SendEmail(recipient, subject string, text []byte) error {
 	e := &email.Email{
 		To:      []string{recipient},
-		From:    fmt.Sprintf("%s <%s>", es.SMTPFrom, es.SMTPLogin),
+		From:    es.SMTPFrom,
 		Subject: subject,
 		Text:    text,
 		Headers: textproto.MIMEHeader{},

@@ -23,8 +23,10 @@ func NewMail(c *fiber.Ctx) error {
 		return utils.HandleError(c, err, fiber.StatusBadRequest, err.Error())
 	}
 
+	user := c.Locals("user").(*models.User)
+
 	otp := models.OTP{
-		UserID:    c.Locals("user_id").(uint),
+		UserID:    user.ID,
 		Email:     input.Email,
 		ExpiresAt: time.Now().Add(10 * time.Minute),
 	}
