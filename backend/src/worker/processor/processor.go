@@ -5,6 +5,7 @@ import (
 	"compress/gzip"
 	"context"
 	"fmt"
+	"interrupted-export/src/mail"
 	"interrupted-export/src/models"
 	"interrupted-export/src/utils"
 	"interrupted-export/src/worker/processor/processes"
@@ -53,6 +54,16 @@ func ProcessExportJob(job *models.Queue, user *models.User) error {
 	if err := createArchiveFromDir(exportDir, output); err != nil {
 		_ = os.Remove(archivePath)
 		return fmt.Errorf("creating archive: %w", err)
+	}
+
+	sender, err := mail.NewEmailSender()
+	if err != nil {
+		return fmt.Errorf("initializing email sender: %w", err)
+	}
+
+	if err := sender.SendArchive(user.Email, archivePath); err != nil {
+		utils.Logger.WithError(err).WithField("user_id", user.ID).Error("Failed to send export archive")
+		return fmt.Errorf("failed to send archive: %w", err)
 	}
 
 	return nil
