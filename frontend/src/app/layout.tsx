@@ -67,11 +67,13 @@ export default function RootLayout({
 }>) {
     return (
         <html lang="en" made-by="kars">
+            <head>
+                <link rel="icon" href="/assets/fav.png" />
+            </head>
             <Body className={`${inter.className} __kars`}>
                 <main className="relative flex min-h-screen w-full flex-col">
                     <AOS />
                     {children}
-                    <p>Made By Kars ツ</p>
                 </main>
                 <Console isProd={isProd} />
             </Body>

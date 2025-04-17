@@ -20,6 +20,7 @@
     "gsap": "latest",
     "lenis": "latest",
     "locomotive-aos": "latest",
+    "lucide-react": "^0.488.0",
     "motion": "latest",
     "next": "latest",
     "next-nprogress-bar": "latest",
