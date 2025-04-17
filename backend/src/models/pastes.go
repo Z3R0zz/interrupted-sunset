@@ -25,7 +25,7 @@ type Paste struct {
 
 func (u *User) Pastes(ctx context.Context) ([]Paste, error) {
 	var pastes []Paste
-	query := `SELECT id, uploaded_by, slug, foldername, title, lang, content, pgp_signature, pgp_key, filesize, created_at, updated_at FROM pastes WHERE user_id = ?`
+	query := `SELECT id, uploaded_by, slug, foldername, title, lang, content, pgp_signature, pgp_key, filesize, created_at, updated_at FROM pastes WHERE uploaded_by = ?`
 	rows, err := database.DB.QueryContext(ctx, query, u.ID)
 	if err != nil {
 		return nil, err

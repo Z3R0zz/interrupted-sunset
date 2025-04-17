@@ -19,5 +19,9 @@ func ProcessExportJob(job *models.Queue, user *models.User) error {
 		return fmt.Errorf("processing shorteners: %w", err)
 	}
 
+	if err := processes.ProcessPastes(job, user, exportDir, ctx); err != nil {
+		return fmt.Errorf("processing pastes: %w", err)
+	}
+
 	return nil
 }
