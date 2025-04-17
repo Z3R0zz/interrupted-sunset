@@ -7,6 +7,7 @@ import (
 	"interrupted-export/src/models"
 	"interrupted-export/src/utils"
 	"os"
+	"path/filepath"
 )
 
 func ProcessPastes(job *models.Queue, user *models.User, dir string, ctx context.Context) error {
@@ -34,6 +35,31 @@ func ProcessPastes(job *models.Queue, user *models.User, dir string, ctx context
 
 	if _, err := file.Write(pasteJSON); err != nil {
 		return fmt.Errorf("writing to export file: %w", err)
+	}
+
+	pasteDir := fmt.Sprintf("%s/pastes", dir)
+	if err := os.MkdirAll(pasteDir, 0755); err != nil {
+		return fmt.Errorf("failed to create paste export dir: %w", err)
+	}
+
+	for _, paste := range pastes {
+		if paste.Content == nil || paste.Title == "" {
+			continue
+		}
+
+		title := utils.SanitizeFilename(paste.Title)
+
+		if filepath.Ext(title) != ".txt" {
+			title += ".txt"
+		}
+
+		pastePath := fmt.Sprintf("%s/%s", pasteDir, title)
+		if err := os.WriteFile(pastePath, []byte(*paste.Content), 0644); err != nil {
+			utils.Logger.WithError(err).WithFields(map[string]interface{}{
+				"paste_id": paste.ID,
+				"title":    paste.Title,
+			}).Warn("Failed to write paste to file")
+		}
 	}
 
 	utils.Logger.WithFields(map[string]interface{}{
