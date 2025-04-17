@@ -58,3 +58,26 @@ func (es *EmailSender) SendEmail(recipient, subject string, text []byte) error {
 
 	return nil
 }
+
+func (es *EmailSender) SendArchive(recipient, filePath string) error {
+	e := &email.Email{
+		To:      []string{recipient},
+		From:    es.SMTPFrom,
+		Subject: "Your Export from interrupted.me",
+		Text:    []byte("Attached is your archive containing your pastes, uploads, and shorteners.\n\nThanks for using interrupted.me!"),
+		Headers: textproto.MIMEHeader{},
+	}
+
+	if _, err := e.AttachFile(filePath); err != nil {
+		return fmt.Errorf("failed to attach archive: %w", err)
+	}
+
+	err := e.Send(fmt.Sprintf("%s:587", es.SMTPServer), smtp.PlainAuth(
+		"", es.SMTPLogin, es.SMTPPassword, es.SMTPServer,
+	))
+	if err != nil {
+		return fmt.Errorf("failed to send email to %s: %w", recipient, err)
+	}
+
+	return nil
+}
