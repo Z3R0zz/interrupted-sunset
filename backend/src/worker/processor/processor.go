@@ -58,13 +58,6 @@ func ProcessExportJob(job *models.Queue, user *models.User) error {
 	return nil
 }
 
-func cleanupExportDir(dir string) error {
-	if err := os.RemoveAll(dir); err != nil {
-		return fmt.Errorf("removing export directory: %w", err)
-	}
-	return nil
-}
-
 func createArchiveFromDir(basePath string, buf io.Writer) error {
 	gw := gzip.NewWriter(buf)
 	defer gw.Close()
