@@ -7,6 +7,7 @@ import (
 	"interrupted-export/src/config"
 	"interrupted-export/src/database"
 	"interrupted-export/src/models"
+	"interrupted-export/src/services"
 	"interrupted-export/src/utils"
 	"interrupted-export/src/worker/processor"
 	"os"
@@ -81,5 +82,11 @@ func main() {
 	config.Load()
 
 	database.Connect(os.Getenv("DATABASE_URL"))
+
+	if err := services.ConnectR2(); err != nil {
+		utils.Logger.WithError(err).Error("Failed to connect to R2")
+		os.Exit(1)
+	}
+
 	workerLoop()
 }
