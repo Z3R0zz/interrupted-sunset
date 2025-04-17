@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"interrupted-export/src/database"
 	"interrupted-export/src/services"
+	"interrupted-export/src/utils"
 	"time"
 )
 
@@ -23,12 +24,14 @@ type Paste struct {
 	UpdatedAt    time.Time
 }
 
-func (u *User) Pastes(ctx context.Context) ([]Paste, error) {
+func (u *User) Pastes(ctx context.Context) ([]Paste, []string, error) {
 	var pastes []Paste
+	var errors []string
+
 	query := `SELECT id, uploaded_by, slug, foldername, title, lang, content, pgp_signature, pgp_key, filesize, created_at, updated_at FROM pastes WHERE uploaded_by = ?`
 	rows, err := database.DB.QueryContext(ctx, query, u.ID)
 	if err != nil {
-		return nil, err
+		return nil, nil, err
 	}
 	defer rows.Close()
 
@@ -52,24 +55,39 @@ func (u *User) Pastes(ctx context.Context) ([]Paste, error) {
 			&createdAtRaw,
 			&updatedAtRaw,
 		); err != nil {
-			return nil, err
+			errors = append(errors, fmt.Sprintf("paste_id=%s: failed to scan paste row: %v", p.ID, err))
+			continue
 		}
 
 		p.CreatedAt, err = time.Parse(layout, string(createdAtRaw))
 		if err != nil {
-			return nil, fmt.Errorf("parsing created_at: %w", err)
+			errors = append(errors, fmt.Sprintf("paste_id=%s: invalid created_at: %v", p.ID, err))
+			continue
 		}
-
 		p.UpdatedAt, err = time.Parse(layout, string(updatedAtRaw))
 		if err != nil {
-			return nil, fmt.Errorf("parsing updated_at: %w", err)
+			errors = append(errors, fmt.Sprintf("paste_id=%s: invalid updated_at: %v", p.ID, err))
+			continue
 		}
 
 		if p.Content == nil {
 			path := fmt.Sprintf("%s/%s", p.Folder, p.Slug)
-			data, err := services.R2.GetObject(ctx, path)
-			if err != nil {
-				return nil, fmt.Errorf("failed to get object from R2: %w", err)
+			var data []byte
+			success := false
+
+			for i := 1; i <= 3; i++ {
+				data, err = services.R2.GetObject(ctx, path)
+				if err == nil {
+					success = true
+					break
+				}
+				utils.Logger.WithError(err).WithField("paste_id", p.ID).Warnf("Retry %d: failed to fetch paste content from R2", i)
+				time.Sleep(500 * time.Millisecond)
+			}
+
+			if !success {
+				errors = append(errors, fmt.Sprintf("paste_id=%s: failed to fetch content after 3 attempts", p.ID))
+				continue
 			}
 
 			content := string(data)
@@ -79,5 +97,5 @@ func (u *User) Pastes(ctx context.Context) ([]Paste, error) {
 		pastes = append(pastes, p)
 	}
 
-	return pastes, nil
+	return pastes, errors, nil
 }
