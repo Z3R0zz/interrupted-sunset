@@ -10,7 +10,7 @@ import (
 )
 
 type Paste struct {
-	ID           string
+	ID           int
 	UserID       int
 	Slug         string
 	Folder       string
@@ -55,18 +55,18 @@ func (u *User) Pastes(ctx context.Context) ([]Paste, []string, error) {
 			&createdAtRaw,
 			&updatedAtRaw,
 		); err != nil {
-			errors = append(errors, fmt.Sprintf("paste_id=%s: failed to scan paste row: %v", p.ID, err))
+			errors = append(errors, fmt.Sprintf("paste_id=%v: failed to scan paste row: %v", p.ID, err))
 			continue
 		}
 
 		p.CreatedAt, err = time.Parse(layout, string(createdAtRaw))
 		if err != nil {
-			errors = append(errors, fmt.Sprintf("paste_id=%s: invalid created_at: %v", p.ID, err))
+			errors = append(errors, fmt.Sprintf("paste_id=%v: invalid created_at: %v", p.ID, err))
 			continue
 		}
 		p.UpdatedAt, err = time.Parse(layout, string(updatedAtRaw))
 		if err != nil {
-			errors = append(errors, fmt.Sprintf("paste_id=%s: invalid updated_at: %v", p.ID, err))
+			errors = append(errors, fmt.Sprintf("paste_id=%v: invalid updated_at: %v", p.ID, err))
 			continue
 		}
 
@@ -86,7 +86,7 @@ func (u *User) Pastes(ctx context.Context) ([]Paste, []string, error) {
 			}
 
 			if !success {
-				errors = append(errors, fmt.Sprintf("paste_id=%s: failed to fetch content after 3 attempts", p.ID))
+				errors = append(errors, fmt.Sprintf("paste_id=%v: failed to fetch content after 3 attempts", p.ID))
 				continue
 			}
 
