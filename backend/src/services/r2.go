@@ -6,9 +6,12 @@ import (
 	"fmt"
 	"io"
 	"os"
+	"time"
 
+	"github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/aws-sdk-go-v2/config"
 	"github.com/aws/aws-sdk-go-v2/credentials"
+	"github.com/aws/aws-sdk-go-v2/feature/s3/manager"
 	"github.com/aws/aws-sdk-go-v2/service/s3"
 )
 
@@ -69,4 +72,28 @@ func (r *R2Service) GetObject(ctx context.Context, key string) ([]byte, error) {
 	}
 
 	return data, nil
+}
+
+func (r *R2Service) UploadFile(ctx context.Context, key string, file *os.File) error {
+	uploader := manager.NewUploader(r.S3Client)
+	_, err := uploader.Upload(ctx, &s3.PutObjectInput{
+		Bucket: &r.Bucket,
+		Key:    &key,
+		Body:   file,
+	})
+	return err
+}
+
+func (r *R2Service) GeneratePresignedURL(ctx context.Context, key string, expireIn time.Duration) (string, error) {
+	presignClient := s3.NewPresignClient(r.S3Client)
+
+	presignedURL, err := presignClient.PresignGetObject(ctx, &s3.GetObjectInput{
+		Bucket: aws.String(r.Bucket),
+		Key:    aws.String(key),
+	}, s3.WithPresignExpires(expireIn))
+	if err != nil {
+		return "", fmt.Errorf("failed to generate presigned URL: %w", err)
+	}
+
+	return presignedURL.URL, nil
 }

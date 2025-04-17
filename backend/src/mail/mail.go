@@ -64,7 +64,7 @@ func (es *EmailSender) SendArchive(recipient, filePath string) error {
 		To:      []string{recipient},
 		From:    es.SMTPFrom,
 		Subject: "Your Export from interrupted.me",
-		Text:    []byte("Attached is your archive containing your pastes, uploads, and shorteners.\n\nThanks for using interrupted.me!"),
+		Text:    []byte("Attached is your archive containing your pastes, uploads, and shorteners.\n\nThanks for using interrupted.me! 🖤"),
 		Headers: textproto.MIMEHeader{},
 	}
 
