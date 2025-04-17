@@ -12,6 +12,12 @@ func Queue(c *fiber.Ctx) error {
 
 	queue := models.Queue{UserID: user.ID}
 
+	if user.EmailVerifiedAt == nil {
+		return c.Status(fiber.StatusForbidden).JSON(fiber.Map{
+			"error": "Email verification is required to create a queue entry.",
+		})
+	}
+
 	exists, err := queue.ExistsInQueue(c.Context())
 	if err != nil {
 		return utils.HandleError(c, err, fiber.StatusInternalServerError, "failed to check queue existence")

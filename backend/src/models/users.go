@@ -89,3 +89,15 @@ func (u *User) Get(ctx context.Context) error {
 
 	return nil
 }
+
+func (u *User) IsBanned() (bool, error) {
+	var banned bool
+	query := `SELECT EXISTS(SELECT 1 FROM bans WHERE bannable_id = ? AND expired_at > NOW())`
+
+	err := database.DB.QueryRow(query, u.ID).Scan(&banned)
+	if err != nil {
+		return false, fmt.Errorf("failed to check ban status: %w", err)
+	}
+
+	return banned, nil
+}
