@@ -3,11 +3,16 @@ package main
 import (
 	"context"
 	"database/sql"
+	"errors"
+	"interrupted-export/src/config"
 	"interrupted-export/src/database"
 	"interrupted-export/src/models"
 	"interrupted-export/src/utils"
+	"interrupted-export/src/worker/processor"
 	"os"
 	"time"
+
+	_ "github.com/go-sql-driver/mysql"
 )
 
 func workerLoop() {
@@ -22,14 +27,25 @@ func workerLoop() {
 		}
 
 		queue, err := models.FetchJob(ctx)
-		if err == sql.ErrNoRows {
+		if errors.Is(err, sql.ErrNoRows) {
 			_ = tx.Commit()
+			utils.Logger.Info("No jobs in queue. Sleeping...")
 			time.Sleep(2 * time.Second)
 			continue
 		} else if err != nil {
 			utils.Logger.WithError(err).Error("Failed to fetch job")
 			_ = tx.Rollback()
 			time.Sleep(2 * time.Second)
+			continue
+		}
+
+		user := models.User{
+			ID: queue.UserID,
+		}
+
+		if err := user.Get(ctx); err != nil {
+			utils.Logger.WithError(err).WithField("user_id", queue.UserID).Error("Failed to get user")
+			_ = tx.Rollback()
 			continue
 		}
 
@@ -49,19 +65,21 @@ func workerLoop() {
 			"user_id": queue.UserID,
 		}).Info("Processing job")
 
-		// We doin crazy shit here
-		// models.MarkFailed(job.ID, "some error")
-		// models.MarkDone(job.ID)
+		if err := processor.ProcessExportJob(queue, &user); err != nil {
+			utils.Logger.WithError(err).WithField("job_id", queue.ID).Error("Failed to process job")
+			queue.MarkFailed(err.Error())
+			continue
+		}
+
+		queue.MarkDone()
 	}
 }
 
 func main() {
 	utils.Logger.Info("Starting worker...")
-	dsn := os.Getenv("DATABASE_URL")
-	if dsn == "" {
-		utils.Logger.Fatal("DATABASE_URL is not set")
-	}
 
-	database.Connect(dsn)
+	config.Load()
+
+	database.Connect(os.Getenv("DATABASE_URL"))
 	workerLoop()
 }

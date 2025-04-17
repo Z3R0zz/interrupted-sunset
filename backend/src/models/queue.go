@@ -3,6 +3,7 @@ package models
 import (
 	"context"
 	"database/sql"
+	"fmt"
 	"interrupted-export/src/database"
 	"time"
 )
@@ -67,14 +68,31 @@ func FetchJob(ctx context.Context) (*Queue, error) {
         FOR UPDATE SKIP LOCKED
     `)
 
-	var q Queue
+	var (
+		q                          Queue
+		createdAtRaw, updatedAtRaw []byte
+	)
+
 	err := row.Scan(
 		&q.ID, &q.UserID, &q.Status, &q.AttemptCount,
-		&q.LastError, &q.CreatedAt, &q.UpdatedAt,
+		&q.LastError, &createdAtRaw, &updatedAtRaw,
 	)
 	if err != nil {
 		return nil, err
 	}
+
+	const layout = "2006-01-02 15:04:05" // standard DATETIME format
+
+	q.CreatedAt, err = time.Parse(layout, string(createdAtRaw))
+	if err != nil {
+		return nil, fmt.Errorf("parse created_at: %w", err)
+	}
+
+	q.UpdatedAt, err = time.Parse(layout, string(updatedAtRaw))
+	if err != nil {
+		return nil, fmt.Errorf("parse updated_at: %w", err)
+	}
+
 	return &q, nil
 }
 
