@@ -30,7 +30,7 @@ func workerLoop() {
 		queue, err := models.FetchJob(ctx)
 		if errors.Is(err, sql.ErrNoRows) {
 			_ = tx.Commit()
-			utils.Logger.Info("No jobs in queue. Sleeping...")
+
 			time.Sleep(2 * time.Second)
 			continue
 		} else if err != nil {
