@@ -22,7 +22,12 @@ func ProcessUploads(job *models.Queue, user *models.User, dir string, ctx contex
 		return fmt.Errorf("marshalling uploads: %w", err)
 	}
 
-	exportFilePath := fmt.Sprintf("%s/uploads.json", dir)
+	jsonDir := fmt.Sprintf("%s/jsons", dir)
+	if err := os.MkdirAll(jsonDir, 0755); err != nil {
+		return fmt.Errorf("failed to create json directory: %w", err)
+	}
+
+	exportFilePath := fmt.Sprintf("%s/uploads.json", jsonDir)
 	file, err := os.Create(exportFilePath)
 	if err != nil {
 		return fmt.Errorf("creating export file: %w", err)

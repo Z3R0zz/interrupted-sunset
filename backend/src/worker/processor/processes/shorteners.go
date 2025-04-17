@@ -20,7 +20,12 @@ func ProcessShorteners(job *models.Queue, user *models.User, dir string, ctx con
 		return fmt.Errorf("marshalling shorteners: %w", err)
 	}
 
-	exportFilePath := fmt.Sprintf("%s/shorteners.json", dir)
+	jsonDir := fmt.Sprintf("%s/jsons", dir)
+	if err := os.MkdirAll(jsonDir, 0755); err != nil {
+		return fmt.Errorf("failed to create json directory: %w", err)
+	}
+
+	exportFilePath := fmt.Sprintf("%s/shorteners.json", jsonDir)
 	file, err := os.Create(exportFilePath)
 	if err != nil {
 		return fmt.Errorf("creating export file: %w", err)
