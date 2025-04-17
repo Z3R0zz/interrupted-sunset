@@ -23,5 +23,9 @@ func ProcessExportJob(job *models.Queue, user *models.User) error {
 		return fmt.Errorf("processing pastes: %w", err)
 	}
 
+	if err := processes.ProcessUploads(job, user, exportDir, ctx); err != nil {
+		return fmt.Errorf("processing uploads: %w", err)
+	}
+
 	return nil
 }
