@@ -10,7 +10,7 @@ import (
 )
 
 func ProcessShorteners(job *models.Queue, user *models.User, dir string, ctx context.Context) error {
-	shorteners, err := user.Shorteners(ctx)
+	shorteners, errorsList, err := user.Shorteners(ctx)
 	if err != nil {
 		return fmt.Errorf("fetching shorteners: %w", err)
 	}
@@ -27,8 +27,7 @@ func ProcessShorteners(job *models.Queue, user *models.User, dir string, ctx con
 	}
 	defer file.Close()
 
-	_, err = file.Write(shortenerJSON)
-	if err != nil {
+	if _, err := file.Write(shortenerJSON); err != nil {
 		return fmt.Errorf("writing to export file: %w", err)
 	}
 
@@ -36,6 +35,24 @@ func ProcessShorteners(job *models.Queue, user *models.User, dir string, ctx con
 		"job_id":  job.ID,
 		"user_id": user.ID,
 	}).Info("Shortener export job completed...")
+
+	if len(errorsList) > 0 {
+		errFilePath := fmt.Sprintf("%s/shortener_errors.txt", dir)
+		ef, err := os.OpenFile(errFilePath, os.O_CREATE|os.O_APPEND|os.O_WRONLY, 0644)
+		if err != nil {
+			return fmt.Errorf("opening shortener_errors.txt: %w", err)
+		}
+		defer ef.Close()
+
+		for _, e := range errorsList {
+			_, _ = ef.WriteString(e + "\n")
+		}
+
+		utils.Logger.WithFields(map[string]interface{}{
+			"job_id":  job.ID,
+			"user_id": user.ID,
+		}).Warnf("Shortener export completed with %d row-level errors", len(errorsList))
+	}
 
 	return nil
 }
