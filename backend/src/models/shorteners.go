@@ -2,6 +2,7 @@ package models
 
 import (
 	"context"
+	"fmt"
 	"interrupted-export/src/database"
 	"time"
 )
@@ -24,11 +25,33 @@ func (u *User) Shorteners(ctx context.Context) ([]Shortener, error) {
 	}
 	defer rows.Close()
 
+	const layout = "2006-01-02 15:04:05"
+
 	for rows.Next() {
 		var s Shortener
-		if err := rows.Scan(&s.ID, &s.UserID, &s.TargetUrl, &s.Slug, &s.CreatedAt, &s.UpdatedAt); err != nil {
+		var createdAtRaw, updatedAtRaw []byte
+
+		if err := rows.Scan(
+			&s.ID,
+			&s.UserID,
+			&s.TargetUrl,
+			&s.Slug,
+			&createdAtRaw,
+			&updatedAtRaw,
+		); err != nil {
 			return nil, err
 		}
+
+		s.CreatedAt, err = time.Parse(layout, string(createdAtRaw))
+		if err != nil {
+			return nil, fmt.Errorf("parsing created_at: %w", err)
+		}
+
+		s.UpdatedAt, err = time.Parse(layout, string(updatedAtRaw))
+		if err != nil {
+			return nil, fmt.Errorf("parsing updated_at: %w", err)
+		}
+
 		shorteners = append(shorteners, s)
 	}
 
