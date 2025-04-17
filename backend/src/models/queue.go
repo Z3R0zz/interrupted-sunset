@@ -62,7 +62,7 @@ func GetQueueByUserID(ctx context.Context, userID uint) (*Queue, error) {
 func FetchJob(ctx context.Context) (*Queue, error) {
 	row := database.DB.QueryRowContext(ctx, `
         SELECT id, user_id, status, attempt_count, last_error, created_at, updated_at FROM queue
-        WHERE status = 'waiting'
+        WHERE status = 'waiting' AND attempt_count < 3
         ORDER BY created_at ASC
         LIMIT 1
         FOR UPDATE SKIP LOCKED
@@ -105,10 +105,25 @@ func (q *Queue) MarkDone() {
 	database.DB.Exec(`UPDATE queue SET status = 'done', updated_at = NOW() WHERE id = ?`, q.ID)
 }
 
-func (q *Queue) MarkFailed(errStr string) {
+func (q *Queue) MarkFailed(reason string) {
+	if q.AttemptCount+1 >= 3 {
+		database.DB.Exec(`
+			UPDATE queue
+			SET status = 'failed',
+				attempt_count = attempt_count + 1,
+				last_error = ?,
+				updated_at = NOW()
+			WHERE id = ?
+		`, reason, q.ID)
+		return
+	}
+
 	database.DB.Exec(`
-        UPDATE queue
-        SET status = 'failed', attempt_count = attempt_count + 1, last_error = ?, updated_at = NOW()
-        WHERE id = ?
-    `, errStr, q.ID)
+		UPDATE queue
+		SET status = 'waiting',
+			attempt_count = attempt_count + 1,
+			last_error = ?,
+			updated_at = NOW()
+		WHERE id = ?
+	`, reason, q.ID)
 }
