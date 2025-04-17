@@ -5,8 +5,10 @@ import (
 	"encoding/json"
 	"fmt"
 	"interrupted-export/src/models"
+	"interrupted-export/src/services"
 	"interrupted-export/src/utils"
 	"os"
+	"time"
 )
 
 func ProcessUploads(job *models.Queue, user *models.User, dir string, ctx context.Context) error {
@@ -55,4 +57,23 @@ func ProcessUploads(job *models.Queue, user *models.User, dir string, ctx contex
 	}
 
 	return nil
+}
+
+func fetchFileWithRetry(ctx context.Context, path string) ([]byte, error) {
+	var data []byte
+	var err error
+
+	for attempt := 1; attempt <= 3; attempt++ {
+		data, err = services.R2.GetObject(ctx, path)
+		if err == nil {
+			return data, nil
+		}
+
+		utils.Logger.WithError(err).WithField("path", path).
+			Warnf("Retry %d: failed to fetch R2 object", attempt)
+
+		time.Sleep(time.Second * time.Duration(attempt))
+	}
+
+	return nil, fmt.Errorf("failed to fetch object %s after 3 attempts: %w", path, err)
 }
