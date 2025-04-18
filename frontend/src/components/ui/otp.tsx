@@ -6,13 +6,7 @@ import {
     KeyboardEvent,
     ClipboardEvent,
 } from "react";
-
-/*
-Copyright © 2025 Kars (github.com/kars1996)
-
-Not to be shared, replicated or used without prior consent.
-Contact Kars for any enquiries
-*/
+import { Mail, AlertCircle, Check } from "lucide-react";
 
 interface OTPInputProps {
     length?: number;
@@ -34,6 +28,8 @@ export default function OTPInput({
     const [otp, setOtp] = useState<string[]>(Array(length).fill(""));
     const [cooldown, setCooldown] = useState<number>(0);
     const [isLoading, setIsLoading] = useState<boolean>(false);
+    const [error, setError] = useState<string>("");
+    const [success, setSuccess] = useState<string>("");
     const inputRefs = useRef<(HTMLInputElement | null)[]>([]);
 
     useEffect(() => {
@@ -141,11 +137,15 @@ export default function OTPInput({
         if (cooldown > 0 || !onSend) return;
 
         setIsLoading(true);
+        setError("");
+        setSuccess("");
         try {
             await onSend();
             setCooldown(cooldownTime);
+            setSuccess("OTP sent to your email");
         } catch (error) {
             console.error("Error sending code:", error);
+            setError("Failed to send OTP. Please try again.");
         } finally {
             setIsLoading(false);
         }
@@ -160,6 +160,20 @@ export default function OTPInput({
 
     return (
         <div className={`flex flex-col items-center ${containerClassName}`}>
+            {error && (
+                <div className="mb-4 flex w-full items-center rounded-md border border-red-800 bg-red-900/20 px-4 py-3 text-red-300">
+                    <AlertCircle className="mr-2 h-4 w-4" />
+                    {error}
+                </div>
+            )}
+
+            {success && (
+                <div className="mb-4 flex w-full items-center rounded-md border border-green-800 bg-green-900/20 px-4 py-3 text-green-300">
+                    <Check className="mr-2 h-4 w-4" />
+                    {success}
+                </div>
+            )}
+
             <div className="flex justify-center gap-2">
                 {Array.from({ length }, (_, index) => (
                     <input
@@ -174,16 +188,16 @@ export default function OTPInput({
                         onChange={(e) => handleChange(e, index)}
                         onKeyDown={(e) => handleKeyDown(e, index)}
                         onPaste={(e) => handlePaste(e, index)}
-                        className={`h-16 w-12 rounded border-2 border-neutral-800 bg-neutral-900 text-center text-xl font-bold text-white transition-all focus:border-red-500 focus:outline-none focus:ring-2 focus:ring-red-500 ${inputClassName}`}
+                        className={`h-12 w-10 rounded-md border border-zinc-700 bg-zinc-900 text-center text-lg font-bold text-white transition-all focus:border-red-500 focus:outline-none focus:ring-2 focus:ring-red-500 md:h-14 md:w-12 ${inputClassName}`}
                         aria-label={`Digit ${index + 1}`}
                     />
                 ))}
             </div>
 
-            <div className="mt-8 flex items-center gap-4">
+            <div className="mt-6 flex items-center gap-4">
                 <button
                     onClick={clearOTP}
-                    className="rounded-md bg-neutral-800 px-4 py-2 text-white transition-colors hover:bg-neutral-700"
+                    className="rounded-md border border-zinc-700 bg-transparent px-4 py-2 text-zinc-300 transition-colors hover:bg-zinc-800"
                 >
                     Clear
                 </button>
@@ -191,7 +205,11 @@ export default function OTPInput({
                 <button
                     onClick={handleSendCode}
                     disabled={cooldown > 0 || isLoading}
-                    className={`flex items-center gap-2 rounded-md px-6 py-2 font-medium transition-colors ${cooldown > 0 ? "cursor-not-allowed bg-neutral-700 text-neutral-400" : "bg-red-600 text-white hover:bg-red-700"}`}
+                    className={`flex items-center gap-2 rounded-md px-6 py-2 font-medium transition-colors ${
+                        cooldown > 0
+                            ? "cursor-not-allowed bg-zinc-700 text-zinc-400"
+                            : "bg-gradient-to-r from-red-600 to-red-800 text-white hover:from-red-700 hover:to-red-900"
+                    }`}
                 >
                     {isLoading ? (
                         <>
@@ -201,7 +219,10 @@ export default function OTPInput({
                     ) : cooldown > 0 ? (
                         `Resend in ${cooldown}s`
                     ) : (
-                        "Send Code"
+                        <>
+                            <Mail className="h-4 w-4" />
+                            Send Code
+                        </>
                     )}
                 </button>
             </div>
