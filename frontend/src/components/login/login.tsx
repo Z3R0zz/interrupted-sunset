@@ -20,7 +20,7 @@ export default function LoginPage() {
             const response = await login(username, password);
             if (!response.success)
                 throw new Error(response.error || "Login failed");
-            if (response.success && response.data!.token) {
+            if (response.success && response.data) {
                 const expiryDate = new Date();
                 expiryDate.setDate(expiryDate.getDate() + 7);
                 document.cookie = `sunset_token=${response.data!.token}; expires=${expiryDate.toUTCString()}; path=/; SameSite=Strict${process.env.NODE_ENV === "production" ? "; Secure" : ""}`;
