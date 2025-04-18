@@ -11,7 +11,7 @@ export function middleware(request: NextRequest) {
     const currentUser = request.cookies.get("sunset_token")?.value;
 
     if (currentUser && request.nextUrl.pathname.startsWith("/login")) {
-        return Response.redirect(new URL("/dash", request.url));
+        return Response.redirect(new URL("/dashboard", request.url));
     }
 
     if (!currentUser && request.nextUrl.pathname.startsWith("/dashboard")) {

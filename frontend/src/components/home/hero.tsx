@@ -76,7 +76,7 @@ export default function SunsetPage() {
                         <span className="text-red-400">lives on</span>
                     </h2>
 
-                    <p className="mb-8 text-lg leading-relaxed text-zinc-400 md:text-xl">
+                    <p className="mb-8 text-lg leading-relaxed font-light text-zinc-400 md:text-xl">
                         After years of dedication and collaboration, we're proud
                         to announce the completion of our journey. We've created
                         something meaningful together, and now it's time to
@@ -204,8 +204,8 @@ export default function SunsetPage() {
                     className="border-t border-zinc-900 py-12 text-center"
                 >
                     <h2 className="mb-6 text-3xl font-medium">
-                        Ready for your{" "}
-                        <span className="text-red-500">next sunset?</span>
+                        Not without saying{" "}
+                        <span className="text-red-500">Goodbye</span>
                     </h2>
                     <p className="mx-auto mb-8 max-w-2xl text-zinc-400">
                         Your data will remain available for download until April
