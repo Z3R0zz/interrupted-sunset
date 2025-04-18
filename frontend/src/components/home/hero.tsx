@@ -160,25 +160,7 @@ export default function SunsetPage() {
                                 project possible. We're grateful for every
                                 moment you spent with us.
                             </p>
-                            <div className="flex flex-wrap gap-2">
-                                {[
-                                    "dopamine",
-                                    "zero",
-                                    "Pota",
-                                    "kars",
-                                    "uid",
-                                ].map((name) => (
-                                    <span
-                                        key={name}
-                                        className="rounded-full bg-zinc-800 px-3 py-1 text-sm text-zinc-300"
-                                    >
-                                        {name}
-                                    </span>
-                                ))}
-                                <span className="rounded-full bg-zinc-800 px-3 py-1 text-sm text-zinc-300">
-                                    +more
-                                </span>
-                            </div>
+                            
                         </div>
 
                         <div
@@ -249,12 +231,6 @@ export default function SunsetPage() {
                             </p>
                         </div>
                         <div className="flex gap-6 text-zinc-500">
-                            <Link
-                                href="/contact"
-                                className="transition-colors hover:text-red-500"
-                            >
-                                Contact
-                            </Link>
                             <Link
                                 href="/dashboard"
                                 className="transition-colors hover:text-red-500"

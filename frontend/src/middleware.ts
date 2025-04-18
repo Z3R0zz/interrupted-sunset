@@ -8,12 +8,9 @@ Contact Kars for any enquiries
 */
 
 export function middleware(request: NextRequest) {
-    const currentUser = request.cookies.get("currentUser")?.value;
+    const currentUser = request.cookies.get("sunset_token")?.value;
 
-    if (
-        (currentUser && request.nextUrl.pathname.startsWith("/login")) ||
-        (currentUser && request.nextUrl.pathname.startsWith("/register"))
-    ) {
+    if (currentUser && request.nextUrl.pathname.startsWith("/login")) {
         return Response.redirect(new URL("/dash", request.url));
     }
 
