@@ -47,6 +47,10 @@ export const metadata: Metadata = {
     },
 };
 
+export const viewport = {
+    themeColor: "#ff1000"
+}
+
 // ? This check assumes you're hosting on vercel. If you're self-hosting you will need another check
 let isProd: boolean = false;
 if (process.env.NEXT_PUBLIC_VERCEL_GIT_COMMIT_SHA) {
