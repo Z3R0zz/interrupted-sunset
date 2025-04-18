@@ -78,7 +78,7 @@ export async function verifyMail(
 ): Promise<APIRes<{ message: string }>> {
     try {
         const res = await api.post<{ message: string }>("/mail/verify", {
-            code: Number(code),
+            code,
         });
         if (res.status == 200) {
             return {
