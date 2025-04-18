@@ -20,6 +20,7 @@ import {
     verifyMail,
     downloadQueue,
 } from "@/lib/server/protected";
+import OTPInput from "../ui/otp";
 
 export default function DashboardPage() {
     const router = useRouter();
@@ -57,17 +58,16 @@ export default function DashboardPage() {
     };
 
     const handleSendOTP = async () => {
-        if (!email) {
+        if (!email && !otpSent) {
             setError("Please enter your email address");
             return;
         }
-
+    
         setError("");
         try {
             const response = await createMail(email);
             if (response.success) {
                 setOtpSent(true);
-                setSuccess("OTP sent to your email");
             } else {
                 setError(response.error || "Failed to send OTP");
             }
@@ -81,8 +81,9 @@ export default function DashboardPage() {
             setError("Please enter the OTP code");
             return;
         }
-
+    
         setError("");
+        setSuccess("");
         try {
             const response = await verifyMail(otpCode);
             if (response.success) {
@@ -324,27 +325,12 @@ export default function DashboardPage() {
                                                 </div>
                                             ) : (
                                                 <div className="space-y-4">
-                                                    <div>
-                                                        <label
-                                                            htmlFor="otp"
-                                                            className="mb-1 block text-sm font-medium text-zinc-400"
-                                                        >
-                                                            OTP Code
-                                                        </label>
-                                                        <input
-                                                            type="text"
-                                                            id="otp"
-                                                            value={otpCode}
-                                                            onChange={(e) =>
-                                                                setOtpCode(
-                                                                    e.target
-                                                                        .value,
-                                                                )
-                                                            }
-                                                            className="w-full rounded-md border border-zinc-700 bg-zinc-900 p-2 text-white"
-                                                            placeholder="Enter OTP sent to your email"
-                                                        />
-                                                    </div>
+                                                    <OTPInput
+                                                        length={6}
+                                                        onComplete={setOtpCode}
+                                                        onSend={handleSendOTP}
+                                                        cooldownTime={60}
+                                                    />
                                                     <button
                                                         onClick={
                                                             handleVerifyOTP
