@@ -15,7 +15,7 @@ Contact Kars for any enquiries
 */
 
 export default class api {
-    private static baseURL = process.env.NODE_ENV === "development" ? "http://localhost:3000" : process.env.BACKEND_URL
+    private static baseURL = process.env.BACKEND_URL
     private static userAgent = process.env.API_USER_AGENT || "your-useragent";
     private static instance = axios.create({
         baseURL: this.baseURL,

@@ -12,9 +12,7 @@ export async function login(
             username,
             password,
         });
-        if (!res.data.token) {
-            throw new Error("Login failed");
-        }
+        console.log(JSON.stringify(res))
         return {
             success: true,
             data: res.data,
@@ -26,6 +24,7 @@ export async function login(
                 error: error.response?.data?.error || error.message,
             };
         }
+        console.log(error);
         return {
             success: false,
             error: "Failed to get token",
