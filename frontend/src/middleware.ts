@@ -14,7 +14,7 @@ export function middleware(request: NextRequest) {
         return Response.redirect(new URL("/dash", request.url));
     }
 
-    if (!currentUser && request.nextUrl.pathname.startsWith("/dash")) {
+    if (!currentUser && request.nextUrl.pathname.startsWith("/dashboard")) {
         return Response.redirect(
             new URL(
                 `/login?redirect=${encodeURI(request.nextUrl.pathname)}`,
