@@ -20,13 +20,17 @@ func ProcessArchiveFile(filePath string, user *models.User) error {
 		return fmt.Errorf("checking archive size: %w", err)
 	}
 
+	if user.Email == nil {
+		return fmt.Errorf("user email is nil")
+	}
+
 	if info.Size() <= maxSize {
 		sender, err := mail.NewEmailSender()
 		if err != nil {
 			return fmt.Errorf("initializing email sender: %w", err)
 		}
 
-		if err := sender.SendArchive(user.Email, filePath); err != nil {
+		if err := sender.SendArchive(*user.Email, filePath); err != nil {
 			utils.Logger.WithError(err).WithField("user_id", user.ID).Error("Failed to send export archive")
 			return fmt.Errorf("failed to send archive: %w", err)
 		}
@@ -50,7 +54,7 @@ func ProcessArchiveFile(filePath string, user *models.User) error {
 			Thanks for using interrupted.me! 🖤
 		`, url)
 
-		if err := sender.SendEmail(user.Email, "Your interrupted.me export is ready", []byte(body)); err != nil {
+		if err := sender.SendEmail(*user.Email, "Your interrupted.me export is ready", []byte(body)); err != nil {
 			return fmt.Errorf("failed to send archive link: %w", err)
 		}
 

@@ -18,7 +18,7 @@ import (
 type User struct {
 	ID              uint
 	Username        string
-	Email           string
+	Email           *string
 	EmailVerifiedAt *time.Time
 	Password        string
 }
@@ -35,7 +35,6 @@ func (u *User) AttemptLogin(ctx context.Context) (string, error) {
 
 		utils.Logger.WithError(err).WithFields(logrus.Fields{
 			"username": u.Username,
-			"email":    u.Email,
 		}).Error("error querying user")
 
 		return "", fmt.Errorf("internal server error")
