@@ -25,19 +25,12 @@ export const metadata: Metadata = {
     title: { template: "%s – interrupted.me", default: "Sunset" },
 
     openGraph: {
-        url: "https://kars.bio/",
+        url: "https://interrupted.me/",
         type: "website",
-        title: "Kars",
-        siteName: "kars.bio",
-        description: "Default text for all apps powered by create-kapp.",
-        images: [
-            {
-                url: "https://cdn3.kars.bio/assets/banner.png",
-                width: 800,
-                height: 800,
-                alt: "Banner",
-            },
-        ],
+        title: "interrupted.me - Sunset",
+        siteName: "interrupted.me",
+        description:
+            "After years of dedication and collaboration, we're proud to announce the completion of our journey. We've created something meaningful together, and now it's time to celebrate our achievements.",
     },
     robots: {
         index: true,
