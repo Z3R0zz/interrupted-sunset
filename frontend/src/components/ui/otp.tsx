@@ -201,30 +201,6 @@ export default function OTPInput({
                 >
                     Clear
                 </button>
-
-                <button
-                    onClick={handleSendCode}
-                    disabled={cooldown > 0 || isLoading}
-                    className={`flex items-center gap-2 rounded-md px-6 py-2 font-medium transition-colors ${
-                        cooldown > 0
-                            ? "cursor-not-allowed bg-zinc-700 text-zinc-400"
-                            : "bg-gradient-to-r from-red-600 to-red-800 text-white hover:from-red-700 hover:to-red-900"
-                    }`}
-                >
-                    {isLoading ? (
-                        <>
-                            <span className="h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent"></span>
-                            Sending...
-                        </>
-                    ) : cooldown > 0 ? (
-                        `Resend in ${cooldown}s`
-                    ) : (
-                        <>
-                            <Mail className="h-4 w-4" />
-                            Send Code
-                        </>
-                    )}
-                </button>
             </div>
         </div>
     );

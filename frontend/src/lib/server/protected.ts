@@ -46,7 +46,7 @@ export async function createMail(
         const res = await api.post<{ message: string }>("/mail/new", {
             email,
         });
-        if (res.data.message == "Please check your email for the OTP code") {
+        if (res.status == 200) {
             return {
                 success: true,
                 data: res.data,
@@ -78,9 +78,9 @@ export async function verifyMail(
 ): Promise<APIRes<{ message: string }>> {
     try {
         const res = await api.post<{ message: string }>("/mail/verify", {
-            code,
+            code: Number(code),
         });
-        if (res.data.message == "Email verified successfully") {
+        if (res.status == 200) {
             return {
                 success: true,
                 data: res.data,
@@ -109,7 +109,7 @@ export async function verifyMail(
 export async function downloadQueue(): Promise<APIRes<{ message: string }>> {
     try {
         const res = await api.post<{ message: string }>("/queue");
-        if (res.data.message == "Queue entry created successfully") {
+        if (res.status == 200) {
             return {
                 success: true,
                 data: res.data,
