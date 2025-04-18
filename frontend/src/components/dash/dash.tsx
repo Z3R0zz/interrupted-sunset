@@ -584,28 +584,12 @@ export default function DashboardPage() {
                     <div className="flex items-center">
                         <div className="mr-3 h-5 w-5 rounded-full bg-gradient-to-b from-orange-300 to-red-500"></div>
                         <p className="text-zinc-400">
-                            interrupted.me © 2020-2025
+                            interrupted.me © 2023-2025
                         </p>
-                    </div>
-                    <div className="text-xs text-zinc-500">
-                        All data will remain available for download until
-                        December 31, 2025
                     </div>
                     <div className="flex gap-6 text-zinc-500">
                         <Link
-                            href="#"
-                            className="transition-colors hover:text-red-500"
-                        >
-                            Privacy
-                        </Link>
-                        <Link
-                            href="#"
-                            className="transition-colors hover:text-red-500"
-                        >
-                            Terms
-                        </Link>
-                        <Link
-                            href="#"
+                            href="mailto:support@interrupted.me"
                             className="transition-colors hover:text-red-500"
                         >
                             Support
