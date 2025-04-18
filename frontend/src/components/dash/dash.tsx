@@ -484,34 +484,32 @@ export default function DashboardPage() {
                                             <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3">
                                                 {[
                                                     {
-                                                        name: "Alex Johnson",
-                                                        role: "Design Lead",
-                                                        years: "5 years",
+                                                        name: "Zero",
+                                                        role: "Developer",
                                                     },
                                                     {
-                                                        name: "Taylor Smith",
-                                                        role: "Lead Developer",
-                                                        years: "5 years",
+                                                        name: "Kars1996",
+                                                        role: "Developer & Designer",
                                                     },
                                                     {
-                                                        name: "Jordan Parker",
-                                                        role: "Project Manager",
-                                                        years: "4 years",
+                                                        name: "Cope",
+                                                        role: "Developer & Administrator",
                                                     },
                                                     {
-                                                        name: "Morgan Lee",
-                                                        role: "UX Researcher",
-                                                        years: "3 years",
+                                                        name: "Dopamine",
+                                                        role: "Administrator",
                                                     },
                                                     {
-                                                        name: "Riley Brown",
-                                                        role: "Support Lead",
-                                                        years: "4 years",
+                                                        name: "Pota",
+                                                        role: "Administrator",
                                                     },
                                                     {
-                                                        name: "Casey Wilson",
-                                                        role: "Marketing",
-                                                        years: "3 years",
+                                                        name: "Entroxx",
+                                                        role: "Administrator",
+                                                    },
+                                                    {
+                                                        name: "Owner",
+                                                        role: "Staff",
                                                     },
                                                 ].map((person) => (
                                                     <div
@@ -523,9 +521,6 @@ export default function DashboardPage() {
                                                         </h4>
                                                         <p className="text-sm text-zinc-400">
                                                             {person.role}
-                                                        </p>
-                                                        <p className="mt-1 text-xs text-zinc-500">
-                                                            {person.years}
                                                         </p>
                                                     </div>
                                                 ))}
@@ -549,9 +544,7 @@ export default function DashboardPage() {
                                                         "Early Adopters",
                                                         "Beta Testers",
                                                         "Community Moderators",
-                                                        "Content Creators",
-                                                        "Translators",
-                                                        "Open Source Contributors",
+                                                        "Feedback Providers",
                                                     ].map((group) => (
                                                         <span
                                                             key={group}
