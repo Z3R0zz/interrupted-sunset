@@ -361,7 +361,7 @@ export default function DashboardPage() {
                                                 You can now request your data
                                                 download.
                                             </p>
-                                            <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
+                                            <div className="grid grid-cols-1 gap-6 md:grid-cols-1">
                                                 <div className="flex flex-col rounded-lg border border-zinc-700 bg-zinc-800/30 p-6">
                                                     <div className="mb-4 flex items-start justify-between">
                                                         <div>
