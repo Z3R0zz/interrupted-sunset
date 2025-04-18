@@ -12,7 +12,10 @@ export async function login(
             username,
             password,
         });
-        console.log(JSON.stringify(res))
+        if (!res.data.token) {
+            console.log(JSON.stringify(res))
+            throw new Error("No token in response");
+        }
         return {
             success: true,
             data: res.data,
@@ -27,7 +30,7 @@ export async function login(
         console.log(error);
         return {
             success: false,
-            error: "Failed to get token",
+            error: (error as Error).message || "Unknown error",
         };
     }
 }
