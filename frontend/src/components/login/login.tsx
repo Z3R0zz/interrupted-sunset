@@ -29,7 +29,7 @@ export default function LoginPage() {
 
                 setTimeout(() => {
                     router.push("/dashboard");
-                }, 1000);
+                }, 2500);
             } else {
                 throw new Error(response.error || "Login failed");
             }
