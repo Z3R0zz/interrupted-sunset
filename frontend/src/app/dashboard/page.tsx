@@ -1,5 +1,5 @@
-import DashboardPage from "@/components/dash/dash"
-import type { Metadata } from "next"
+import DashboardPage from "@/components/dash/dash";
+import type { Metadata } from "next";
 
 /*
 Copyright © 2025 Kars (github.com/kars1996)
@@ -9,9 +9,9 @@ Contact Kars for any enquiries
 */
 
 export const metadata: Metadata = {
-    title: "Download your data"
-}
+    title: "Download your data",
+};
 
-export default function() {
-    return <DashboardPage />
-    }
+export default function () {
+    return <DashboardPage />;
+}

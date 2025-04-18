@@ -62,7 +62,7 @@ export default function DashboardPage() {
             setError("Please enter your email address");
             return;
         }
-    
+
         setError("");
         try {
             const response = await createMail(email);
@@ -81,7 +81,7 @@ export default function DashboardPage() {
             setError("Please enter the OTP code");
             return;
         }
-    
+
         setError("");
         setSuccess("");
         try {
@@ -371,11 +371,12 @@ export default function DashboardPage() {
                                                             </h3>
                                                             <p className="text-sm text-zinc-400">
                                                                 All your data in
-                                                                JSON format
+                                                                tarball format
+                                                                with pastes,
+                                                                shortners,
+                                                                uploads and
+                                                                files.
                                                             </p>
-                                                        </div>
-                                                        <div className="text-sm text-zinc-400">
-                                                            ~4.2 MB
                                                         </div>
                                                     </div>
                                                     <div className="mt-auto">
@@ -391,7 +392,7 @@ export default function DashboardPage() {
                                                     </div>
                                                 </div>
 
-                                                <div className="flex flex-col rounded-lg border border-zinc-700 bg-zinc-800/30 p-6">
+                                                {/* <div className="flex flex-col rounded-lg border border-zinc-700 bg-zinc-800/30 p-6">
                                                     <div className="mb-4 flex items-start justify-between">
                                                         <div>
                                                             <h3 className="mb-1 font-medium">
@@ -419,7 +420,7 @@ export default function DashboardPage() {
                                                             Request Download
                                                         </button>
                                                     </div>
-                                                </div>
+                                                </div> */}
                                             </div>
                                         </div>
                                     ) : user && user.Queue ? (
@@ -439,14 +440,14 @@ export default function DashboardPage() {
                                                         user.Status,
                                                     )}
                                                 </div>
-                                                {user.Status === "done" && (
+                                                {/* {user.Status === "done" && (
                                                     <div className="mt-4">
                                                         <button className="flex w-full items-center justify-center rounded-md bg-gradient-to-r from-green-600 to-green-800 py-2 hover:from-green-700 hover:to-green-900">
                                                             <Download className="mr-2 h-4 w-4" />
                                                             Download Now
                                                         </button>
                                                     </div>
-                                                )}
+                                                )} */}
                                             </div>
                                         </div>
                                     ) : null}

@@ -19,6 +19,7 @@ export async function getUser(): Promise<APIRes<UserRes>> {
                 data: res.data,
             };
         }
+        console.log(JSON.stringify(res))
         return {
             success: false,
             error: "Failed to get user",
@@ -30,6 +31,7 @@ export async function getUser(): Promise<APIRes<UserRes>> {
                 error: error.response?.data?.error || error.message,
             };
         }
+        console.log(error)
         return {
             success: false,
             error: "Failed to get user",
@@ -50,6 +52,8 @@ export async function createMail(
                 data: res.data,
             };
         }
+
+        console.log(JSON.stringify(res))
         return {
             success: false,
             error: "Failed to create mail",
@@ -61,6 +65,7 @@ export async function createMail(
                 error: error.response?.data?.error || error.message,
             };
         }
+        console.log(error)
         return {
             success: false,
             error: "Failed to create mail",
@@ -81,6 +86,7 @@ export async function verifyMail(
                 data: res.data,
             };
         }
+        console.log(JSON.stringify(res))
         return {
             success: false,
             error: "Failed to verify mail",
@@ -92,6 +98,7 @@ export async function verifyMail(
                 error: error.response?.data?.error || error.message,
             };
         }
+        console.log(error)
         return {
             success: false,
             error: "Failed to verify mail",
@@ -108,6 +115,7 @@ export async function downloadQueue(): Promise<APIRes<{ message: string }>> {
                 data: res.data,
             };
         }
+        console.log(JSON.stringify(res))
         return {
             success: false,
             error: "Failed to download queue",
@@ -119,6 +127,7 @@ export async function downloadQueue(): Promise<APIRes<{ message: string }>> {
                 error: error.response?.data?.error || error.message,
             };
         }
+        console.log(error)
         return {
             success: false,
             error: "Failed to download queue",
