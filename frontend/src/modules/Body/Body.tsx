@@ -3,6 +3,7 @@ import Lenis from "lenis";
 import "./lenis.css";
 import { useEffect, useState, createContext } from "react";
 import { AppProgressBar as ProgressBar } from "next-nprogress-bar";
+import { Toaster } from "sonner";
 
 /*
 Copyright © 2025 Kars (github.com/kars1996)
@@ -103,6 +104,7 @@ export default function Body({ children, className = "" }: BaseProp) {
                 }}
             >
                 {children}
+                <Toaster position="top-right" />
                 <ProgressBar
                     height="2px"
                     color="#ff6666"
