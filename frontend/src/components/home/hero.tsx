@@ -76,7 +76,7 @@ export default function SunsetPage() {
                         <span className="text-red-400">lives on</span>
                     </h2>
 
-                    <p className="mb-8 text-lg leading-relaxed font-light text-zinc-400 md:text-xl">
+                    <p className="mb-8 text-lg font-light leading-relaxed text-zinc-400 md:text-xl">
                         After years of dedication and collaboration, we're proud
                         to announce the completion of our journey. We've created
                         something meaningful together, and now it's time to
@@ -160,7 +160,6 @@ export default function SunsetPage() {
                                 project possible. We're grateful for every
                                 moment you spent with us.
                             </p>
-                            
                         </div>
 
                         <div
@@ -178,8 +177,9 @@ export default function SunsetPage() {
                             </p>
                             <div className="flex flex-wrap gap-2">
                                 {[
-                                    "dopamine",
                                     "zero",
+                                    "Kars1996",
+                                    "dopamine",
                                     "Pota",
                                     "edgebug",
                                     "entroxx",
