@@ -232,7 +232,11 @@ export default function DashboardPage() {
                                     </h2>
                                     <p className="mb-6 text-zinc-400">
                                         All your project data is available for
-                                        download until December 31, 2025
+                                        download until December 31, 2025.
+                                        <br />
+                                        <div className="rounded-lg border border-red-900/20 bg-red-900/10 p-6 ">
+                                            Note: The email provided is where your data will be sent to.
+                                        </div>
                                     </p>
 
                                     {user && (
