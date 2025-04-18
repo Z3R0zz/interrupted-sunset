@@ -28,7 +28,7 @@ export default class api {
 
     private static async getAuthToken(): Promise<string | undefined> {
         const cookieStore = await cookies();
-        return cookieStore.get("token")?.value;
+        return cookieStore.get("sunset_token")?.value;
     }
 
     private static async getHeaders(): Promise<any> {
