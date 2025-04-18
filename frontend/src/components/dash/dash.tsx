@@ -237,8 +237,8 @@ export default function DashboardPage() {
 
                                     {user && (
                                         <div className="mb-4 rounded-lg bg-zinc-800/50 p-4">
-                                            <div className="mb-2 flex items-center justify-between">
-                                                <div className="font-medium">
+                                            <div className="mb-4 grid grid-cols-1 gap-4 md:grid-cols-2">
+                                            <div className="font-medium">
                                                     Account Status
                                                 </div>
                                                 <div className="text-sm text-zinc-400">
