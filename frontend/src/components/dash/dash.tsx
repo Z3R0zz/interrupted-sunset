@@ -232,7 +232,7 @@ export default function DashboardPage() {
                                     </h2>
                                     <p className="mb-6 text-zinc-400">
                                         All your project data is available for
-                                        download until December 31, 2025.
+                                        download until May 19, 2025.
                                         <br />
                                         <div className="mt-2 flex items-center rounded-md border border-neutral-800 bg-neutral-900/20 px-4 py-3 text-neutral-300">
                                             <AlertCircle className="mr-2 h-4 w-4 flex-shrink-0 text-amber-500" />
@@ -578,9 +578,7 @@ export default function DashboardPage() {
                                                 As we sunset this project, we
                                                 want to express our sincere
                                                 appreciation for your support
-                                                and contributions. The impact of
-                                                this project will continue long
-                                                after its conclusion.
+                                                and contributions.
                                             </p>
                                         </div>
                                     </div>
@@ -596,7 +594,7 @@ export default function DashboardPage() {
                     <div className="flex items-center">
                         <div className="mr-3 h-5 w-5 rounded-full bg-gradient-to-b from-orange-300 to-red-500"></div>
                         <p className="text-zinc-400">
-                            interrupted.me © 2023-2025
+                            interrupted.me © 2024-2025
                         </p>
                     </div>
                     <div className="flex gap-6 text-zinc-500">

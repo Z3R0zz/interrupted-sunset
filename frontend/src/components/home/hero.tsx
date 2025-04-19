@@ -208,8 +208,8 @@ export default function SunsetPage() {
                         <span className="text-red-500">Goodbye</span>
                     </h2>
                     <p className="mx-auto mb-8 max-w-2xl text-zinc-400">
-                        Your data will remain available for download until April
-                        30, 2025. Log in to access your information and export
+                        Your data will remain available for download until May
+                        19, 2025. Log in to access your information and export
                         everything you need.
                     </p>
                     <Link href="/login" className="inline-block">
@@ -227,7 +227,7 @@ export default function SunsetPage() {
                         <div className="flex items-center">
                             <div className="mr-3 h-6 w-6 rounded-full bg-gradient-to-b from-orange-300 to-red-500"></div>
                             <p className="text-zinc-400">
-                                interrupted.me © 2023-2025
+                                interrupted.me © 2024-2025
                             </p>
                         </div>
                         <div className="flex gap-6 text-zinc-500">
