@@ -234,15 +234,24 @@ export default function DashboardPage() {
                                         All your project data is available for
                                         download until December 31, 2025.
                                         <br />
-                                        <div className="rounded-lg border border-red-900/20 bg-red-900/10 p-6 ">
-                                            Note: The email provided is where your data will be sent to.
+                                        <div className="mt-2 flex items-center rounded-md border border-neutral-800 bg-neutral-900/20 px-4 py-3 text-neutral-300">
+                                            <AlertCircle className="mr-2 h-4 w-4 flex-shrink-0 text-amber-500" />
+                                            <span>
+                                                <strong className="text-amber-400">
+                                                    Important:
+                                                </strong>{" "}
+                                                We'll send your download link to
+                                                this email address. It can be
+                                                different from your
+                                                interrupted.me account email.
+                                            </span>
                                         </div>
                                     </p>
 
                                     {user && (
                                         <div className="mb-4 rounded-lg bg-zinc-800/50 p-4">
                                             <div className="mb-4 grid grid-cols-1 gap-4 md:grid-cols-2">
-                                            <div className="font-medium">
+                                                <div className="font-medium">
                                                     Account Status
                                                 </div>
                                                 <div className="text-sm text-zinc-400">
