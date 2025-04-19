@@ -62,7 +62,7 @@ func (r *R2Service) GetObject(ctx context.Context, key string) ([]byte, error) {
 		Key:    &key,
 	})
 	if err != nil {
-		return nil, fmt.Errorf("failed to get object from R2: %w", err)
+		return nil, err
 	}
 	defer output.Body.Close()
 

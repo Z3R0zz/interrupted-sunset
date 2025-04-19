@@ -9,6 +9,7 @@ import (
 	"interrupted-export/src/utils"
 	"math/rand"
 	"os"
+	"strings"
 	"time"
 )
 
@@ -105,6 +106,13 @@ func fetchFileWithRetry(parent context.Context, path string) ([]byte, error) {
 		if err == nil {
 			return data, nil
 		}
+
+		// Ghetto fix but fuck it we ball
+		if strings.TrimSpace(err.Error()) == "operation error S3: GetObject, https response error StatusCode: 404, RequestID: , HostID: , NoSuchKey:" {
+			utils.Logger.WithField("path", path).Debugf("file not found: %s", path)
+			return nil, nil
+		}
+
 		lastErr = err
 
 		utils.Logger.
