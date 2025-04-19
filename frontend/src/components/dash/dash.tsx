@@ -240,10 +240,9 @@ export default function DashboardPage() {
                                                 <strong className="text-amber-400">
                                                     Important:
                                                 </strong>{" "}
-                                                We'll send your download link to
-                                                this email address. It can be
-                                                different from your
-                                                interrupted.me account email.
+                                                The email you provide will only
+                                                be used to deliver your download
+                                                link.
                                             </span>
                                         </div>
                                     </p>
