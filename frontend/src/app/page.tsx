@@ -1,4 +1,5 @@
 import SunsetPage from "@/components/home/hero";
+import SunsetPreloader from "@/components/home/preloader";
 import Link from "next/link";
 
 /*
@@ -8,6 +9,10 @@ Not to be shared, replicated or used without prior consent.
 Contact Kars for any enquiries
 */
 export default function IndexPage() {
-    return <SunsetPage />
+    return (
+        <>
+            <SunsetPreloader />
+            <SunsetPage />
+        </>
+    );
 }
-        
