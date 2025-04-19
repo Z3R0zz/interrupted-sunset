@@ -22,7 +22,7 @@ export default function LoginPage() {
                 throw new Error(response.error || "Login failed");
             if (response.success && response.data && response.data.token) {
                 const expiryDate = new Date();
-                expiryDate.setDate(expiryDate.getDate() + 7);
+                expiryDate.setMinutes(expiryDate.getMinutes() + 30);
                 document.cookie = `sunset_token=${response.data!.token}; expires=${expiryDate.toUTCString()}; path=/; SameSite=Strict${process.env.NODE_ENV === "production" ? "; Secure" : ""}`;
 
                 showToast("success", "Login successful");
