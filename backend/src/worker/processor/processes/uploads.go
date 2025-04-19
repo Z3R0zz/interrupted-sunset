@@ -7,6 +7,7 @@ import (
 	"interrupted-export/src/models"
 	"interrupted-export/src/services"
 	"interrupted-export/src/utils"
+	"math/rand"
 	"os"
 	"time"
 )
@@ -91,21 +92,35 @@ func ProcessUploads(job *models.Queue, user *models.User, dir string, ctx contex
 	return nil
 }
 
-func fetchFileWithRetry(ctx context.Context, path string) ([]byte, error) {
-	var data []byte
-	var err error
+func fetchFileWithRetry(parent context.Context, path string) ([]byte, error) {
+	const maxAttempts = 3
+	const perReqTimeout = 15 * time.Second
 
-	for attempt := 1; attempt <= 3; attempt++ {
-		data, err = services.R2.GetObject(ctx, path)
+	var lastErr error
+	for attempt := 1; attempt <= maxAttempts; attempt++ {
+		attemptCtx, cancel := context.WithTimeout(parent, perReqTimeout)
+		data, err := services.R2.GetObject(attemptCtx, path)
+		cancel()
+
 		if err == nil {
 			return data, nil
 		}
+		lastErr = err
 
-		utils.Logger.WithError(err).WithField("path", path).
-			Warnf("Retry %d: failed to fetch R2 object", attempt)
+		utils.Logger.
+			WithError(err).
+			WithField("path", path).
+			Warnf("attempt %d/%d failed", attempt, maxAttempts)
 
-		time.Sleep(time.Second * time.Duration(attempt))
+		backoff := time.Duration(1<<uint(attempt-1)) * time.Second
+		if backoff > 5*time.Second {
+			backoff = 5 * time.Second
+		}
+		select {
+		case <-parent.Done():
+			return nil, parent.Err()
+		case <-time.After(backoff + time.Duration(rand.Intn(500))*time.Millisecond):
+		}
 	}
-
-	return nil, fmt.Errorf("failed to fetch object %s after 3 attempts: %w", path, err)
+	return nil, fmt.Errorf("failed to fetch %s after %d attempts: %w", path, maxAttempts, lastErr)
 }
