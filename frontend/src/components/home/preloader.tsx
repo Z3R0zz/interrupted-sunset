@@ -1,6 +1,13 @@
 "use client";
 import { useState, useEffect } from "react";
 
+/*
+Copyright © 2025 Kars (github.com/kars1996)
+
+Not to be shared, replicated, or used without prior consent.
+Contact me for any enquiries
+*/
+
 export const SunsetPreloader = () => {
     const [isLoading, setIsLoading] = useState(true);
     const [isVisible, setIsVisible] = useState(true);

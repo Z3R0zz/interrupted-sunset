@@ -22,6 +22,13 @@ import {
 } from "@/lib/server/protected";
 import OTPInput from "../ui/otp";
 
+/*
+Copyright © 2025 Kars (github.com/kars1996)
+
+Not to be shared, replicated, or used without prior consent.
+Contact me for any enquiries
+*/
+
 export default function DashboardPage() {
     const router = useRouter();
     const [user, setUser] = useState<UserRes | null>(null);
