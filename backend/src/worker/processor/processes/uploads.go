@@ -7,7 +7,9 @@ import (
 	"interrupted-export/src/models"
 	"interrupted-export/src/services"
 	"interrupted-export/src/utils"
+	"math/rand"
 	"os"
+	"strings"
 	"time"
 )
 
@@ -91,21 +93,42 @@ func ProcessUploads(job *models.Queue, user *models.User, dir string, ctx contex
 	return nil
 }
 
-func fetchFileWithRetry(ctx context.Context, path string) ([]byte, error) {
-	var data []byte
-	var err error
+func fetchFileWithRetry(parent context.Context, path string) ([]byte, error) {
+	const maxAttempts = 3
+	const perReqTimeout = 15 * time.Second
 
-	for attempt := 1; attempt <= 3; attempt++ {
-		data, err = services.R2.GetObject(ctx, path)
+	var lastErr error
+	for attempt := 1; attempt <= maxAttempts; attempt++ {
+		attemptCtx, cancel := context.WithTimeout(parent, perReqTimeout)
+		data, err := services.R2.GetObject(attemptCtx, path)
+		cancel()
+
 		if err == nil {
 			return data, nil
 		}
 
-		utils.Logger.WithError(err).WithField("path", path).
-			Warnf("Retry %d: failed to fetch R2 object", attempt)
+		// Ghetto fix but fuck it we ball
+		if strings.TrimSpace(err.Error()) == "operation error S3: GetObject, https response error StatusCode: 404, RequestID: , HostID: , NoSuchKey:" {
+			utils.Logger.WithField("path", path).Debugf("file not found: %s", path)
+			return nil, nil
+		}
 
-		time.Sleep(time.Second * time.Duration(attempt))
+		lastErr = err
+
+		utils.Logger.
+			WithError(err).
+			WithField("path", path).
+			Warnf("attempt %d/%d failed", attempt, maxAttempts)
+
+		backoff := time.Duration(1<<uint(attempt-1)) * time.Second
+		if backoff > 5*time.Second {
+			backoff = 5 * time.Second
+		}
+		select {
+		case <-parent.Done():
+			return nil, parent.Err()
+		case <-time.After(backoff + time.Duration(rand.Intn(500))*time.Millisecond):
+		}
 	}
-
-	return nil, fmt.Errorf("failed to fetch object %s after 3 attempts: %w", path, err)
+	return nil, fmt.Errorf("failed to fetch %s after %d attempts: %w", path, maxAttempts, lastErr)
 }
