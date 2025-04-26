@@ -1,6 +1,13 @@
 import { toast } from "sonner";
 import { AlertCircle, CheckCircle, Info, XCircle } from "lucide-react";
 
+/*
+Copyright © 2025 Kars (github.com/kars1996)
+
+Not to be shared, replicated, or used without prior consent.
+Contact me for any enquiries
+*/
+
 type ToastType = "success" | "error" | "warning" | "info";
 
 interface ToastOptions {

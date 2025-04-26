@@ -4,6 +4,13 @@ import { ArrowRight, LogIn, Users } from "lucide-react";
 import Link from "next/link";
 import { SPContext } from "@/modules/Body/Body";
 
+/*
+Copyright © 2025 Kars (github.com/kars1996)
+
+Not to be shared, replicated, or used without prior consent.
+Contact me for any enquiries
+*/
+
 export default function SunsetPage() {
     const [scrollY, setScrollY] = useState(0);
     const { scroll } = useContext(SPContext);

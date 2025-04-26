@@ -3,6 +3,13 @@ import api from "@/modules/API";
 import type { APIRes, LoginRes } from "@/types/api";
 import axios from "axios";
 
+/*
+Copyright © 2025 Kars (github.com/kars1996)
+
+Not to be shared, replicated, or used without prior consent.
+Contact me for any enquiries
+*/
+
 export async function login(
     username: string,
     password: string,

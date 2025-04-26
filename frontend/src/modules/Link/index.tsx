@@ -3,6 +3,13 @@ import { SPContext } from "@/modules/Body/Body";
 import Link from "next/link";
 import { useContext } from "react";
 
+/*
+Copyright © 2025 Kars (github.com/kars1996)
+
+Not to be shared, replicated, or used without prior consent.
+Contact me for any enquiries
+*/
+
 // Thanks to nitlix for this code
 
 type LinkProp = {

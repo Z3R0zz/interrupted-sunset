@@ -6,6 +6,13 @@ import { useRouter } from "next/navigation";
 import { login } from "@/lib/server/auth";
 import { showToast } from "../ui/toast";
 
+/*
+Copyright © 2025 Kars (github.com/kars1996)
+
+Not to be shared, replicated, or used without prior consent.
+Contact me for any enquiries
+*/
+
 export default function LoginPage() {
     const router = useRouter();
     const [username, setUsername] = useState("");
