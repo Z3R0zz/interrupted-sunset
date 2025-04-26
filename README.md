@@ -1,5 +1,11 @@
 # Interrupted Sunset
 
+
+> ### 🏆 Credits  
+> **Frontend:** Built by [Kars](https://kars.bio) ([GitHub @kars1996](https://github.com/kars1996), owner at [Resyced Design](https://resyced.design))  
+> **Special Thanks:** To Zero's grandmother for being eternally cool. 💯
+
+
 The long awaited download your files and run update for interrupted.me as we sunset the project.
 
 ---
