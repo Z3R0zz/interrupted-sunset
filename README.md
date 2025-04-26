@@ -66,4 +66,4 @@ Open [http://localhost:3000](http://localhost:3000) to view the frontend.
 
 ## 📝 License
 
-See [`frontend/LICENSE`](frontend/LICENSE) for license details.
+See [`LICENSE`](LICENSE) for license details.
